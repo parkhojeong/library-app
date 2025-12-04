@@ -2,6 +2,8 @@ package com.group.libraryapp.service.user
 
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
+import com.group.libraryapp.domain.util.fail
+import com.group.libraryapp.domain.util.findByIdOrThrow
 import com.group.libraryapp.dto.user.request.UserCreateRequest
 import com.group.libraryapp.dto.user.request.UserUpdateRequest
 import com.group.libraryapp.dto.user.response.UserResponse
@@ -25,13 +27,13 @@ class UserService (
 
     @Transactional
     fun updateUserName(request: UserUpdateRequest) {
-        val user = userRepository.findById(request.id).orElseThrow(::IllegalArgumentException)
+        val user = userRepository.findByIdOrThrow(request.id)
         user.updateName(request.name)
     }
 
     @Transactional
     fun deleteUser(name: String){
-        val user = userRepository.findByName(name).orElseThrow(::IllegalArgumentException)
+        val user = userRepository.findByName(name) ?: fail()
         userRepository.delete(user)
     }
 
